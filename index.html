@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoTrade NZ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17 8C8 10 5.9 16.17 3.82 19.12C3.82 19.12 2 17 2 14c0-5.52 4.48-10 10-10 1.93 0 3.72.56 5.24 1.5L15 7l2 1zm-5 9c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm6.18-5.76C18.06 10.56 18 9.8 18 9l2-2c.55 1.27.88 2.66.96 4.12L19 12l-.82-.76z"/>
+        </svg>
+      </div>
+      <span class="logo-text">ecotrade<span>nz</span></span>
+    </a>
+
+    <nav>
+      <a href="/" data-page="home">Home</a>
+      <a href="/products" data-page="products">Products</a>
+      <a href="/contact" data-page="contact">Contact Us</a>
+      <a href="/terms" data-page="terms">Terms</a>
+      <a href="/quote" data-page="quote">Request Quote</a>
+    </nav>
+  </header>
+
+  <iframe id="content-frame" src=""></iframe>
+
+  <script>
+    const routes = {
+      "/": {
+        title: "Home",
+        page: "home",
+        url: "https://creatorapp.zohopublic.com.au/ecotrade/request-for-quote/page-embed/Eco_Trade/5NGRJ4qPdBWBn8W3CaN6BpyrkhtphVqphdvAhDUAHXX4CrkMySCyKQZk4AjjpuAdYMZ3R2OqqhdWaOFbgt346j9mgFHuT1XGyUfu"
+      },
+      "/products": {
+        title: "Products",
+        page: "products",
+        url: "https://creatorapp.zohopublic.com.au/ecotrade/request-for-quote/page-embed/Product_Info/WGhy6pUx3ZnrBAdhHzTBtPCesbBFVk7SHq5X995Dnv9xtvuwm3T586Gq5m1g6vPDjC8zeGRwYQEErwT4YS8MDuht4p6GXgnfWgtz"
+      },
+      "/contact": {
+        title: "Contact",
+        page: "contact",
+        url: "https://creatorapp.zohopublic.com.au/ecotrade/request-for-quote/page-embed/Contact_Us/MKVsfP9xaRVP3W9vmw26AnWQMqKghUBUfA3ZZ73Y6f03UedFkKRWp8xYCwqWunBJqpWzbDzMvb9eH5bwYwHFZaxxKSth4jYGAvVq"
+      },
+      "/terms": {
+        title: "Terms",
+        page: "terms",
+        url: "https://creatorapp.zohopublic.com.au/ecotrade/request-for-quote/page-embed/Terms_And_Conditions/TTzK4SUT0Nsn4k8bpPusk04WNUHX3h9faxKGCmxsr3q41Tdshgw0xBVqNFOJxC01prTFbKUXEtxZjCyWA6Vf8C5CabUp5E9eTJVv"
+      },
+      "/quote": {
+        title: "Request Quote",
+        page: "quote",
+        url: "https://creatorapp.zohopublic.com.au/ecotrade/request-for-quote/page-embed/Request_For_Quote1/sZPgJJJVnbbkWJg4t8ktsEZrKOVRdVe7RsYz5SHga2ObQdHYHM7qEhQyWOXArp0tK0f6ztSpyCKCxzX7RZ9C07X3uPvX7vwKP27b"
+      }
+    };
+
+    function navigate(path) {
+      const route = routes[path] || routes["/"];
+      let embedUrl = route.url;
+
+      // Handle QuoteIDs query param for /quote
+      if (path === "/quote") {
+        const params = new URLSearchParams(window.location.search);
+        const quoteIds = params.get("QuoteIDs");
+        if (quoteIds) {
+          embedUrl += "?QuoteIDs=" + encodeURIComponent(quoteIds);
+        }
+      }
+
+      // Update iframe
+      document.getElementById("content-frame").src = embedUrl;
+
+      // Update page title
+      document.title = route.title + " - EcoTrade NZ";
+
+      // Update active nav link
+      document.querySelectorAll("nav a").forEach(function(link) {
+        link.classList.toggle("active", link.dataset.page === route.page);
+      });
+
+      // Update URL without reload
+      if (window.location.pathname !== path) {
+        history.pushState(null, "", path + window.location.search);
+      }
+    }
+
+    // Handle nav clicks with client-side routing
+    document.querySelectorAll("nav a").forEach(function(link) {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        navigate(this.getAttribute("href"));
+      });
+    });
+
+    // Handle browser back/forward
+    window.addEventListener("popstate", function() {
+      navigate(window.location.pathname);
+    });
+
+    // Initial load
+    navigate(window.location.pathname);
+  </script>
+</body>
+</html>
